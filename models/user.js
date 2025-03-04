@@ -39,7 +39,6 @@ class User {
                         productId: new ObjectId(product._id), 
                         quantity: newQuantity
                   });
-                  // updatedCartItems = [...this.cart.items, {productId: new ObjectId(product._id), quantity: newQuantity}];
             }
             const updatedCart = {
                   items: updatedCartItems
