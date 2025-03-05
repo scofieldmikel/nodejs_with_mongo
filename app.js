@@ -2,9 +2,9 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const errorController = require('./controllers/errors');
-const mongoConnect = require('./util/database').mongoConnect;
 const User = require('./models/user');
 
 const app = express();
@@ -19,9 +19,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-      User.findById("67c20b9c2a39a9d7c7c043f0")
+      User.findById("67c891cc6bb5453107cae83d")
       .then(user => {
-            req.user = new User(user.name, user.email, user.cart, user._id);
+            req.user =  user;
             next();
       })
       .catch(err => {
@@ -34,6 +34,21 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-mongoConnect(() => {
+mongoose.connect('mongodb+srv://scofieldmykiel:Testing1@nodejs-complete.p76ua.mongodb.net/shop?retryWrites=true&w=majority&tls=true&tlsAllowInvalidCertificates=true')
+.then(result => {
+      User.findOne().then(user => {
+            if(!user) {
+                  const user = new User({
+                        name: 'Mykiel',
+                        email: 'scofield@test.com',
+                        cart: {
+                              items: []
+                        }
+                  });
+                  user.save();
+            }
+      });
       app.listen(3000);
-})
+}).catch(err => {
+      console.log(err);
+});
