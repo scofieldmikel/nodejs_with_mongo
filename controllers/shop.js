@@ -9,6 +9,7 @@ exports.getProducts = (req, res, next) => {
                   prods: products,
                   pageTitle: 'Shop',
                   path: '/products',
+                  isAuthenticated: req.session.isLoggedIn
             });
       })
       .catch(err => {
@@ -23,7 +24,8 @@ exports.getProduct = (req, res, next) => {
                   res.render('shop/product-detail', { 
                         product: product, 
                         pageTitle: product.title,
-                        path: '/products'
+                        path: '/products',
+                        isAuthenticated: req.session.isLoggedIn
                   });
       })
       .catch(err => {
@@ -38,6 +40,7 @@ exports.getIndex = (req, res, next) => {
                   prods: products ,
                   pageTitle: 'Shop',
                   path: '/',
+                  isAuthenticated: req.session.isLoggedIn
             });
       })
       .catch(err => {
@@ -47,13 +50,14 @@ exports.getIndex = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
       req.user
-      .populate('cart.items.productId')
+            .populate('cart.items.productId')
             .then(user => {
                   const products = user.cart.items;
                   res.render('shop/cart', {
                               path: '/cart',
                               pageTitle: 'Your Cart',
-                              products: products
+                              products: products,
+                              isAuthenticated: req.session.isLoggedIn
                               });
             })
             .catch(err => {
@@ -119,7 +123,8 @@ exports.getOrders = (req, res, next) => {
                   res.render('shop/orders', {
                         path: '/orders',
                         pageTitle: 'Your Orders',
-                        orders: orders
+                        orders: orders,
+                        isAuthenticated: req.session.isLoggedIn
                   });
             })
             .catch(err => {
