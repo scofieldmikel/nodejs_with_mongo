@@ -15,6 +15,8 @@ const userSchema = new Schema({
             type: String,
             required: true
       },
+      resetToken: String,
+      resetTokenExpiration: Date,
       cart: {
             items: [
                   {
@@ -34,7 +36,7 @@ userSchema.methods.addToCart = function(product) {
       if(cartProductIndex >= 0) {
                               newQuantity = this.cart.items[cartProductIndex].quantity + 1;
                               updatedCartItems[cartProductIndex].quantity = newQuantity;
-                        } else { 
+                        } else {
                               updatedCartItems.push({
                                     productId: product._id, 
                                     quantity: newQuantity
